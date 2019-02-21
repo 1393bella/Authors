@@ -1,0 +1,8 @@
+<form (submit)="createAuthor()">
+    <div class="form-group">
+      <label for="exampleFormControlInput1">Author</label>
+      <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="" name="name" [(ngModel)]="newAuthor.name">
+      <button class="btn btn-primary" type="submit">Create</button>
+    </div>
+</form>
+
