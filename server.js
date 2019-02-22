@@ -11,8 +11,8 @@ mongoose.connect('mongodb://localhost/authors', { useNewUrlParser: true });
 const AuthorSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
-        minlength: [3,"Author name needs to be at least 3 characters"]
+        required: [true, 'Name is required.'],
+        minlength: [3, "Author name needs to be at least 3 characters."]
     },
     completed: {
         type: Boolean,
@@ -57,11 +57,13 @@ app.post('/authors', function(req, res){
     newAuthor.name = req.body.name;
     newAuthor.save(function(err, author){
         if (err) {
-            console.log('*********************');
-            console.log('Returned Error: ', err);
-            res.json({message: 'Error', error: err})
-        }
-        else {
+            const errors=[]
+            const errorObj = err['errors']
+            for (var errKey in errorObj){
+                errors.push(errorObj[errKey]['message'])
+            }
+            res.json({message: 'Error', error: errors})
+        } else {
             res.json({message: 'New Author:', data: author})
         }
     });
@@ -69,13 +71,15 @@ app.post('/authors', function(req, res){
 
 // PUT: Update a Task by ID
 app.put('/authors/:id', function(req, res){
-    Author.findOneAndUpdate({ _id: req.params.id }, { name: req.body.name}, function (err, author) {
+    Author.findOneAndUpdate({ _id: req.params.id }, { name: req.body.name}, {runValidators: true}, function (err, author) {
         if (err) {
-            console.log('*********************');
-            console.log('Returned Error: ', err);
-            res.json({message: 'Error', error: err})
-        }
-        else {
+            const errors=[]
+            const errorObj = err['errors']
+            for (var errKey in errorObj){
+                errors.push(errorObj[errKey]['message'])
+            }
+            res.json({message: 'Error', error: errors})
+        } else {
             res.json({message: 'Updated Author:', data: author})
         }
     });

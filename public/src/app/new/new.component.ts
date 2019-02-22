@@ -9,7 +9,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 })
 export class NewComponent implements OnInit {
   newAuthor: any;
-
+  errors: any =[];
   constructor(private _httpService: HttpService, private _route: ActivatedRoute,
     private _router: Router) { }
 
@@ -19,11 +19,14 @@ export class NewComponent implements OnInit {
   
   createAuthor(){
     console.log(this.newAuthor)
-    this._httpService.createAuthor(this.newAuthor).subscribe(author=> {
-
-      this.newAuthor={name: " "}
+    this._httpService.createAuthor(this.newAuthor).subscribe(response=> {
+      if (response['message']=='Error'){
+        console.log(response)
+        this.errors = response['error']
+      } else {
+        this.goHome();
+      }
     })
-    this.goHome();
   }
   goHome(){
     this._router.navigate(['']);

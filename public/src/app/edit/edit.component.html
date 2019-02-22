@@ -2,6 +2,10 @@
     <div class="form-group">
       <label for="exampleFormControlInput1">Author</label>
       <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="" name="name" [(ngModel)]="updatedAuthor.name">
+      <div *ngFor="let error of errors" class="error">
+          {{error}}
+      </div>
+      <p></p>
       <button class="btn btn-primary" type="submit">Update</button>
       <button class="btn btn-primary" [routerLink]="['/']">Cancel</button>
     </div>
